@@ -1,0 +1,96 @@
+1.Make sure that internet is working fine in your CentOS VM
+
+ping yahoo.com
+
+
+2. Login as root
+
+su  
+
+
+3.Install bind and bind-utils
+
+yum install bind
+
+yum install bind-utils
+
+
+4. Start the named service and check the status
+
+service named start
+
+service named status
+
+
+5. Configure the ethernet network interface
+
+i) Get the ip address
+
+ifconfig
+
+eth4 - 10.0.2.15 - NAT Address 
+eth5 - 192.168.1.138 - Host Only or Bridged adapter Address
+
+ii) Go to /etc/sysconfig/network-scripts/
+
+cd /etc/sysconfig/network-scripts/
+
+iii) Configure eth5 manually
+
+vi ifcfg-eth5
+
+DEVICE=eth5
+NM_CONTROLLED=no
+ONBOOT=yes
+TYPE=Ethernet
+DEFROUTE=yes
+IPADDR=192.168.1.200
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=127.0.0.1
+BOOTPROTO=none
+IPV4_FAILURE_FATAL=yes
+IPV6INIT=no
+NAME="System eth5"
+UUID=6dea5cfe-ee62-42dc-8e00-b3709c47c22b
+HWADDR=08:00:27:D7:C1:23
+PEERDNS=yes
+PEERROUTES=yes
+
+
+iv) ifdown and ifup the network interface eth5
+
+ifdown eth5
+ifup eth5
+
+6. Restart the named service and check the status
+
+service named restart
+
+
+7.Ping yahoo.com and look up for the dns server of yahoo.com
+
+ping yahoo.com
+
+nslookup yahoo.com
+
+Server:		127.0.0.1
+Address:	127.0.0.1#53
+
+Non-authoritative answer:
+Name:	yahoo.com
+Address: 206.190.36.45
+Name:	yahoo.com
+Address: 98.139.183.24
+Name:	yahoo.com
+Address: 98.138.253.109
+
+8. To see the messages from dns server when it tries to resolve the different addresses
+
+tail /var/log/messages
+
+9. To enable named service in the system startup
+
+chkconfig named on
+
+

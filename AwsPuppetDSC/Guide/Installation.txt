@@ -1,0 +1,31 @@
+=============================
+How to install Puppet Server
+=============================
+1, download Puppert Server verions 4.5.3 for RHEL 7
+2, WINSCP across using the AWS key pair
+3, Extract using command 
+     tar -xzvf puppet-enterprise-2016.2.1-el-7-x86_64.tar.gz
+4, cd puppet-enterprise-2016.2.1-el-7-x86_64
+     and evlavate and install
+     sudo ./puppet-enterprise-installer
+5, Verify its installed
+   puppet master --version
+6, 
+7, 
+============================
+Bulid Repo
+=====================
+1, sudo yum install -y http://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+
+8, 
+9, 
+10, 
+
+
+Apply
+
+Modules and classes
+Files and Templates
+Hiera, Factor, Ruby Mcollective
+
+Puppet server and enterpise

@@ -1,0 +1,111 @@
+10. Set up hostname
+
+vi /etc/sysconfig/network
+
+NETWORKING=yes
+HOSTNAME=devops1
+
+
+11. Set up domain name
+
+vi /etc/hosts
+
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.1.200	classes.com
+
+
+12. Configure the /etc/named.conf file and add this two zones
+
+vi /etc/named.conf 
+
+zone "classes.com" IN {
+        type master;
+        file "classes.com.zone";
+        allow-update{none;};
+
+};
+
+zone "1.168.192.in-addr.arpa" IN {
+        type master;
+        file "classes.com.rr.zone";
+        allow-update{none;};
+
+};
+
+
+13. Create the 2 zone files
+
+cd /var/named/
+
+vi classes.com.zone
+
+
+
+$ORIGIN classes.com.
+$TTL 86400
+@	IN	SOA	dns1.classes.com.	hostmaster.classes.com. (
+	2001062501	;serial
+	21600	;refresh after 6 hours
+	3600	;retry after 1 hour
+	604800	;expire after 1 week
+	86400 )	;minimum TTL 1 day
+
+	IN	NS	dns1.classes.com.
+
+	IN	MX	10 	mail.classes.com.
+
+	IN	A	192.168.1.200
+
+dns1	IN	A	192.168.1.200
+
+devops1	IN	A	192.168.1.200
+
+ftp	IN 	A	192.168.1.200
+
+mail	IN	CNAME	devops1
+
+www	IN 	CNAME	devops1	
+
+
+
+
+
+vi classes.com.rr.zone
+
+
+
+$ORIGIN 1.168.192.in-addr.arpa.
+$TTL 86400
+@       IN      SOA     dns1.classes.com.       hostmaster.classes.com. (
+        2001062501      ;serial
+        21600   ;refresh after 6 hours
+        3600    ;retry after 1 hour
+        604800  ;expire after 1 week
+        86400 ) ;minimum TTL 1 day
+
+@       IN      NS      devops1.classes.com.
+
+1       IN	PTR    	devops1.classes.com.
+
+2       IN      PTR     devops1.classes.com.
+
+3       IN      PTR     devops1.classes.com.
+
+4       IN      PTR     devops1.classes.com.
+
+
+
+14. Restart the named service
+
+service named restart
+
+15. Look up for the domain name
+
+nslookup devops1.classes.com
+nslookup classes.com
+nslookup www.classes.com
+nslookup mail.classes.com
+
+
+
